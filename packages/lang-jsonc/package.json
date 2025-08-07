@@ -1,6 +1,6 @@
 {
   "name": "@verus188/lang-jsonc",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "JSONC language support for CodeMirror",
   "publishConfig": {
     "access": "public",
