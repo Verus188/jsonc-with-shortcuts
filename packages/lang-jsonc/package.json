@@ -1,6 +1,6 @@
 {
   "name": "@verus188/lang-jsonc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "JSONC language support for CodeMirror",
   "publishConfig": {
     "access": "public",
@@ -44,5 +44,9 @@
     "generate": "lezer-generator src/jsonc.grammar -o src/parser",
     "type-check": "tsc --noEmit",
     "test": "vitest"
-  }
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
 }
