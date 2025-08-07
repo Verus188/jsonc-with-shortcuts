@@ -6,6 +6,8 @@ build/shims/liquid-html-ohm.js
 coverage
 dawn
 dist
+tsconfig.builinfo
+tsconfig.tsbuildinfo
 node_modules
 packages/**/standalone.*
 packages/node/src/theme-liquid-docs
@@ -13,8 +15,6 @@ standalone.js
 standalone.js.LICENSE.txt
 standalone.js.map
 TODO
-tsconfig.builinfo
-tsconfig.tsbuildinfo
 yarn-error.log
 package-lock.json
 .npmrc

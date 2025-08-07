@@ -636,7 +636,7 @@
     "@types/node" "*"
 
 "@verus188/lang-jsonc@file:C:\\Users\\king_\\OneDrive\\Рабочий стол\\modus-operandi-ai\\jsonc-with-shortcuts\\packages\\lang-jsonc":
-  version "1.0.4"
+  version "1.0.6"
   resolved "file:packages/lang-jsonc"
   dependencies:
     "@codemirror/commands" "^6.8.1"
