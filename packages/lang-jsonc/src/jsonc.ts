@@ -25,6 +25,10 @@ export const jsoncLanguage = LRLanguage.define({
   languageData: {
     closeBrackets: { brackets: ['[', '{', '"'] },
     indentOnInput: /^\s*[\}\]]$/,
+    commentTokens: {
+      line: '//',
+      block: { open: '/*', close: '*/' },
+    },
   },
 });
 
