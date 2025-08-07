@@ -35,3 +35,5 @@ export const jsoncLanguage = LRLanguage.define({
 export function jsonc() {
   return new LanguageSupport(jsoncLanguage);
 }
+
+export { jsonParseLinter } from './lint';
