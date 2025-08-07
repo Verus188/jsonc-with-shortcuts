@@ -1,6 +1,6 @@
 {
   "name": "theme-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Swiss Army Knife for Shopify Liquid themes. Everything you need in one handy monorepo!",
   "main": "index.js",
   "repository": "https://github.com/Shopify/theme-tools",
