@@ -1,7 +1,0 @@
-ignore:
-  - base_assets
-  - base_config
-BaseCheck:
-  enabled: true
-  ignore: [base_snippets]
-  base_setting: base_value

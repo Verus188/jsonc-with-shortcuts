@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "exclude": ["**/*.spec.ts"],
-  "compilerOptions": {
-    "outDir": "dist/umd",
-    "tsBuildInfoFile": "dist/umd/tsconfig.tsbuildInfo",
-    "module": "umd"
-  }
-}

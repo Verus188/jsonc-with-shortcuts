@@ -1,3 +1,0 @@
-#!/usr/bin/env node
-const indentationRules = require('../src/indentation-rules');
-console.log(indentationRules.decreaseIndentPattern);
