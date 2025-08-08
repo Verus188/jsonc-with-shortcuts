@@ -1,2 +1,2 @@
-export { jsonc, jsoncLanguage, jsonParseLinter } from './jsonc';
+export { jsonc, jsoncLanguage, jsoncParseLinter } from './jsonc';
 export { parser } from './parser';

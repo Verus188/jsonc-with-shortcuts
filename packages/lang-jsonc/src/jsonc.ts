@@ -36,4 +36,4 @@ export function jsonc() {
   return new LanguageSupport(jsoncLanguage);
 }
 
-export { jsonParseLinter } from './lint';
+export { jsoncParseLinter } from './lint';

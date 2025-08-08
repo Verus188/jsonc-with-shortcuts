@@ -1,35 +1,94 @@
 import { Diagnostic } from '@codemirror/lint';
 import { EditorView } from '@codemirror/view';
 import { Text } from '@codemirror/state';
+import { parseTree, ParseError, ParseErrorCode } from 'jsonc-parser';
 
-/// Calls
-/// [`JSON.parse`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
-/// on the document and, if that throws an error, reports it as a
-/// single diagnostic.
-export const jsonParseLinter =
+/// Linter for JSON with comments (JSONC) using jsonc-parser
+export const jsoncParseLinter =
   () =>
   (view: EditorView): Diagnostic[] => {
-    try {
-      JSON.parse(view.state.doc.toString());
-    } catch (e) {
-      if (!(e instanceof SyntaxError)) throw e;
-      const pos = getErrorPosition(e, view.state.doc);
-      return [
-        {
+    const text = view.state.doc.toString();
+    const errors: ParseError[] = [];
+
+    // Parse the document and collect errors
+    parseTree(text, errors, {
+      allowTrailingComma: false,
+      disallowComments: false, // Явно разрешаем комментарии
+    });
+
+    if (errors.length > 0) {
+      return errors.map((error) => {
+        const pos = getErrorPosition(error, view.state.doc);
+        const endPos = getErrorEndPosition(error, pos, view.state.doc);
+        const message = getErrorMessage(error);
+
+        return {
           from: pos,
-          message: e.message,
+          to: endPos,
+          message: message,
           severity: 'error',
-          to: pos,
-        },
-      ];
+        };
+      });
     }
+
     return [];
   };
 
-function getErrorPosition(error: SyntaxError, doc: Text): number {
-  let m;
-  if ((m = error.message.match(/at position (\d+)/))) return Math.min(+m[1], doc.length);
-  if ((m = error.message.match(/at line (\d+) column (\d+)/)))
-    return Math.min(doc.line(+m[1]).from + +m[2] - 1, doc.length);
-  return 0;
+function getErrorPosition(error: ParseError, doc: Text): number {
+  // Убедимся, что позиция не превышает длину документа
+  return Math.max(0, Math.min(error.offset, doc.length));
+}
+
+function getErrorEndPosition(error: ParseError, fromPos: number, doc: Text): number {
+  // Если есть длина ошибки, используем её, иначе указываем на один символ
+  if (error.length && error.length > 0) {
+    return Math.min(fromPos + error.length, doc.length);
+  }
+
+  // Если fromPos уже в конце документа, не увеличиваем позицию
+  if (fromPos >= doc.length) {
+    return doc.length;
+  }
+
+  // Иначе указываем на следующий символ
+  return Math.min(fromPos + 1, doc.length);
+}
+
+function getErrorMessage(error: ParseError): string {
+  switch (error.error) {
+    case ParseErrorCode.InvalidSymbol:
+      return 'Invalid symbol';
+    case ParseErrorCode.InvalidNumberFormat:
+      return 'Invalid number format';
+    case ParseErrorCode.PropertyNameExpected:
+      return 'Property name expected';
+    case ParseErrorCode.ValueExpected:
+      return 'Value expected';
+    case ParseErrorCode.ColonExpected:
+      return 'Colon expected after property name';
+    case ParseErrorCode.CommaExpected:
+      return 'Comma expected';
+    case ParseErrorCode.CloseBraceExpected:
+      return 'Closing brace "}" expected';
+    case ParseErrorCode.CloseBracketExpected:
+      return 'Closing bracket "]" expected';
+    case ParseErrorCode.EndOfFileExpected:
+      return 'Unexpected characters after JSON';
+    case ParseErrorCode.InvalidCommentToken:
+      return 'Invalid comment token';
+    case ParseErrorCode.UnexpectedEndOfComment:
+      return 'Unexpected end of comment';
+    case ParseErrorCode.UnexpectedEndOfString:
+      return 'Unexpected end of string';
+    case ParseErrorCode.UnexpectedEndOfNumber:
+      return 'Unexpected end of number';
+    case ParseErrorCode.InvalidUnicode:
+      return 'Invalid unicode escape sequence';
+    case ParseErrorCode.InvalidEscapeCharacter:
+      return 'Invalid escape character in string';
+    case ParseErrorCode.InvalidCharacter:
+      return 'Invalid character';
+    default:
+      return 'JSON syntax error';
+  }
 }
