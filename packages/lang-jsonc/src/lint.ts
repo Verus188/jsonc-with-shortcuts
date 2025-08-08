@@ -7,7 +7,13 @@ import { parseTree, ParseError, ParseErrorCode } from 'jsonc-parser';
 export const jsoncParseLinter =
   () =>
   (view: EditorView): Diagnostic[] => {
-    const text = view.state.doc.toString();
+    const text = view.state.doc.toString().trim();
+
+    if (text.length === 0) {
+      // If the document is empty, no errors to report
+      return [];
+    }
+
     const errors: ParseError[] = [];
 
     // Parse the document and collect errors
