@@ -1,33 +1,32 @@
-# @shopify/lang-jsonc
+# @verus188/lang-jsonc
 
-[CodeMirror](https://codemirror.net/) 6 Language Support for VS Code's flavour of JSON with Comments. Trailing commas included.
+This is a fork of @shopify/lang-jsonc. Added a linter and shortcut for comments. Traling commas not allowed.
 
 ## Usage
 
-```js
-import { basicSetup } from 'codemirror';
-import { EditorView } from '@codemirror/view';
-import { EditorState } from '@codemirror/state';
-import { jsonc } from '@shopify/lang-jsonc';
+```tsx
+import ReactCodeMirror, {
+  EditorView,
+  ReactCodeMirrorProps,
+  ReactCodeMirrorRef,
+} from '@uiw/react-codemirror';
+import { codeMirrorJsonStyle } from '../constantsColors/codeMirrorJsonStyle';
+import { forwardRef } from 'react';
+import { linter, lintGutter } from '@codemirror/lint';
+import { jsonc, jsoncParseLinter } from '@verus188/lang-jsonc';
 
-new EditorView({
-  parent: document.getElementById('json-editor'),
-  state: EditorState.create({
-    doc: `
-      {
-        // this is a comment
-        "product": "Apple",
-
-        /* block comment, with trailing comma */
-        "price": "1.00$",
-      }
-    `
-    extensions: [
-      basicSetup,
-      jsonc(),
-    ],
-  }),
-});
+export const JsonEditor = forwardRef<ReactCodeMirrorRef, ReactCodeMirrorProps>(
+  ({ ...props }, ref) => {
+    return (
+      <ReactCodeMirror
+        {...props}
+        ref={ref}
+        extensions={[jsonc(), linter(jsoncParseLinter()), lintGutter(), EditorView.lineWrapping]}
+        theme={codeMirrorJsonStyle}
+      />
+    );
+  },
+);
 ```
 
 ## Credits
